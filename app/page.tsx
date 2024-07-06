@@ -1,8 +1,6 @@
 import Link from "next/link";
 import AuthButton from "@/components/AuthButton";
-import ConnectSupabaseSteps from "@/components/tutorial/ConnectSupabaseSteps";
-import SignUpUserSteps from "@/components/tutorial/SignUpUserSteps";
-import Header from "@/components/Header";
+import Hero from "@/components/Hero";
 import Footer from "@/components/Footer";
 
 export default async function Index() {
@@ -16,12 +14,7 @@ export default async function Index() {
       </nav>
 
       <div className="flex-1 flex flex-col gap-20 max-w-4xl px-3">
-        <Header />
-        <main className="flex-1 flex flex-col gap-6">
-          <h2 className="font-bold text-4xl mb-4">Next steps</h2>
-          <SignUpUserSteps />
-          <ConnectSupabaseSteps />
-        </main>
+        <Hero />
       </div>
 
       <Footer />
