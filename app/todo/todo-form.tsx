@@ -1,6 +1,6 @@
 'use client'
 import { useTodoStore } from "@/store/todoStore"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 interface TodoFormProps {
   userId: string;
@@ -9,6 +9,10 @@ interface TodoFormProps {
 export default function TodoForm({ userId }: TodoFormProps) {
   const { loadTodos, addTodo, deleteTodo, deleteAllTodos, markTodoCompleted } = useTodoStore()
 
+  const todos = useTodoStore((state) => state.todos)
+  console.log(todos)
+  
+  
   const [todo, setTodo] = useState('')
 
   const handleAddTodo = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -17,6 +21,10 @@ export default function TodoForm({ userId }: TodoFormProps) {
     setTodo('')
   }
 
+  useEffect(() => {
+    loadTodos(userId)
+  }, [])
+  
   return (
     <div className="max-w-screen-lg w-full mx-auto">
       <form className="flex justify-center items-center gap-3" onSubmit={handleAddTodo}>
@@ -30,6 +38,6 @@ export default function TodoForm({ userId }: TodoFormProps) {
         />
         <button type="submit" className="px-[12px] py-[10px] rounded-[4px] md:px-[20px] lg:px-[24px] text-sm text-zinc-50 bg-zinc-950 hover:shadow-sm hover:shadow-zinc-100/30 hover:bg-zinc-800">Add</button>
       </form>
-      </div>
+    </div>
   )
 }

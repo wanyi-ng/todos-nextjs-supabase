@@ -5,7 +5,7 @@ import { Todo } from "@/types"
 
 interface TodoState {
   todos: Todo[],
-  loadTodos: () => Promise<void>,
+  loadTodos: (user_id: string) => Promise<void>,
   addTodo: (task: string, user_id: string) => Promise<void>,
   deleteTodo: (id: string) => Promise<void>,
   deleteAllTodos: (user_id: string) => Promise<void>,
@@ -17,18 +17,17 @@ export const useTodoStore = create<TodoState>()(
     persist(
       (set) => ({
         todos: [],
-        loadTodos: async () => {
+        loadTodos: async (user_id: string) => {
           const supabase = createClient()
 
-          const { data, error } = await supabase.from('todos').select()
+          const { data, error } = await supabase.from('todos').select().match({ user_id })
 
           if (error) {
             return console.error(error)
           } else if (data) {
-            set({
+            set((state) => ({
               todos: data
-            })
-            console.log(data)
+            }))
           }
         },
         addTodo: async (task: string, user_id: string) => {
