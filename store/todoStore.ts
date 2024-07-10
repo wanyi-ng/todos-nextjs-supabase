@@ -9,7 +9,8 @@ interface TodoState {
   addTodo: (task: string, user_id: string) => Promise<void>,
   deleteTodo: (id: string) => Promise<void>,
   deleteAllTodos: (user_id: string) => Promise<void>,
-  markTodoCompleted: (todo: Todo) => Promise<void>,
+  markTodoCompleted: (id: string, currentState: boolean) => any,
+  // markTodoCompleted: (todo: Todo) => Promise<void>,
 }
 
 export const useTodoStore = create<TodoState>()(
@@ -25,14 +26,17 @@ export const useTodoStore = create<TodoState>()(
           if (error) {
             return console.error(error)
           } else if (data) {
+            // Sort todos to have completed ones at the bottom
+            const sortedTodos = data.sort((a, b) => a.completed === b.completed ? 0 : a.completed ? 1 : -1)
+
             set((state) => ({
-              todos: data
+              todos: sortedTodos
             }))
           }
         },
         addTodo: async (task: string, user_id: string) => {
           const supabase = createClient()
-          const { data, error } = await supabase.from('todos').insert({ task, completed: false, user_id })
+          const { data, error } = await supabase.from('todos').insert({ task, completed: false, user_id }).select()
 
           if (error) {
             return console.error(error)
@@ -64,17 +68,24 @@ export const useTodoStore = create<TodoState>()(
             todos: []
           }))
         },
-        markTodoCompleted: async (todo: Todo) => {
+        markTodoCompleted: async (id: string, completedStatus: boolean) => {
           const supabase = createClient()
 
-          const { error } = await supabase.from('todos').update({ ...todo, completed: !todo.completed }).match({ id: todo.id })
+          const { error } = await supabase.from('todos').update({ completed: !completedStatus }).match({ id })
 
           if (error) return console.error(error)
 
-          set((state) => ({
-            todos: state.todos.map((t) => t.id === todo.id ? { ...todo, completed: !t.completed } : t)
-          }))
-        }
+          set((state) => {
+            const updatedTodos = state.todos.map((t) => t.id === id ? { ...t, completed: !t.completed } : t)
+
+            // Sort todos to have completed ones at the bottom
+            const sortedTodos = updatedTodos.sort((a, b) => a.completed === b.completed ? 0 : a.completed ? 1 : -1)
+
+            return {
+              todos: sortedTodos,
+            }
+          })
+        },
       }),
       { name: 'todos' }
     )
