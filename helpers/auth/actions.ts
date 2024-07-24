@@ -1,12 +1,12 @@
 "use server"
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { createClient } from "@/utils/supabase/server";
+import { createSupabaseServerClient } from "@/utils/supabase/server";
 
 export async function signIn(formData: FormData) {
   const email = formData.get("email") as string;
   const password = formData.get("password") as string;
-  const supabase = createClient();
+  const supabase = createSupabaseServerClient();
 
   const { error } = await supabase.auth.signInWithPassword({
     email,
@@ -24,7 +24,7 @@ export async function signUp(formData: FormData) {
   const origin = headers().get("origin");
   const email = formData.get("email") as string;
   const password = formData.get("password") as string;
-  const supabase = createClient();
+  const supabase = createSupabaseServerClient();
 
   const { error } = await supabase.auth.signUp({
     email,
@@ -42,7 +42,7 @@ export async function signUp(formData: FormData) {
 };
 
 export async function signOut() {
-  const supabase = createClient();
+  const supabase = createSupabaseServerClient();
   await supabase.auth.signOut();
   return redirect("/login");
 };
