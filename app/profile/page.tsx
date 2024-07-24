@@ -1,12 +1,12 @@
 import { redirect } from "next/navigation"
-import { createClient } from "@/utils/supabase/server"
+import { createSupabaseServerClient } from "@/utils/supabase/server"
 import AuthButton from "@/components/AuthButton"
 import Link from "next/link"
 import Footer from "@/components/Footer"
 
 
 export default async function ProfilePage() {
-  const supabase = createClient()
+  const supabase = createSupabaseServerClient()
 
   const { data: { user } } = await supabase.auth.getUser()
 
