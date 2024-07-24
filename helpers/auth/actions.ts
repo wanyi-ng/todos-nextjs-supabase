@@ -4,8 +4,6 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/utils/supabase/server";
 
 export async function signIn(formData: FormData) {
-  "use server";
-
   const email = formData.get("email") as string;
   const password = formData.get("password") as string;
   const supabase = createClient();
@@ -23,8 +21,6 @@ export async function signIn(formData: FormData) {
 };
 
 export async function signUp(formData: FormData) {
-  "use server";
-
   const origin = headers().get("origin");
   const email = formData.get("email") as string;
   const password = formData.get("password") as string;
@@ -43,4 +39,10 @@ export async function signUp(formData: FormData) {
   }
 
   return redirect("/login?message=Check email to continue sign in process");
+};
+
+export async function signOut() {
+  const supabase = createClient();
+  await supabase.auth.signOut();
+  return redirect("/login");
 };
