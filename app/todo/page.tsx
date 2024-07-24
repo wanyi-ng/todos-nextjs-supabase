@@ -1,10 +1,10 @@
-import { createClient } from "@/utils/supabase/server"
+import { createSupabaseServerClient } from "@/utils/supabase/server"
 import { redirect } from "next/navigation"
 import TodoForm from "./todo-form"
 
 
 export default async function TodoPage() {
-  const supabase = createClient()
+  const supabase = createSupabaseServerClient()
 
   const { data: { user } } = await supabase.auth.getUser()
 
