@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { SubmitButton } from "./submit-button";
-import { signIn, signUp } from "./actions";
+import { signIn, signOut } from "@/helpers/auth/actions";
 
 export default function LoginPage({
   searchParams,
