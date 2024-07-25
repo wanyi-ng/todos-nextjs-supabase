@@ -1,21 +1,11 @@
-import { createClient } from "@/utils/supabase/server";
+import { createSupabaseServerClient } from "@/utils/supabase/server";
 import Link from "next/link";
-import { redirect } from "next/navigation";
+import { signOut } from "@/helpers/auth/actions";
 
 export default async function AuthButton() {
-  const supabase = createClient();
+  const supabase = createSupabaseServerClient();
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  const signOut = async () => {
-    "use server";
-
-    const supabase = createClient();
-    await supabase.auth.signOut();
-    return redirect("/login");
-  };
+  const { data: { user } } = await supabase.auth.getUser();
 
   return user ? (
     <div className="flex items-center gap-4">
