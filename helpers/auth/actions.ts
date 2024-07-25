@@ -3,6 +3,12 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { createSupabaseServerClient } from "@/utils/supabase/server";
 
+export async function readUserSession() {
+  noStore()
+  const supabase = await createSupabaseServerClient()
+  return supabase.auth.getSession()
+}
+
 export async function signIn(formData: FormData) {
   const email = formData.get("email") as string;
   const password = formData.get("password") as string;
