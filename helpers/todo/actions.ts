@@ -1,4 +1,11 @@
 import { createSupabaseBrowserClient } from "@/utils/supabase/client"
+import { revalidatePath, unstable_noStore as noStore } from "next/cache"
+
+export async function getAllTodos() {
+  noStore()
+  const supabase = await createSupabaseBrowserClient()
+  return await supabase.from("todos").select("*")
+}
 
 export async function addTodo(task: string, user_id: string) {
   const supabase = await createSupabaseBrowserClient()
