@@ -12,7 +12,7 @@ export async function deleteTodoById(id: string) {
   const supabase = await createSupabaseBrowserClient()
   await supabase.from("todos").delete().eq("id", id) 
   
-revalidatePath("/todo")
+  revalidatePath("/todo")
 }
 
 export async function updateTodoById(id: string, status: boolean) {
