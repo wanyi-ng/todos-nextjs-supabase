@@ -18,12 +18,13 @@ export async function deleteTodoById(id: string) {
 export async function updateTodoById(id: string, status: boolean) {
   const supabase = await createSupabaseBrowserClient()
   await supabase.from("todos").update({ completed: !status }).eq("id", id)
-  revalidatePath("/todo")
+  
+revalidatePath("/todo")
 }
 
 export async function deleteAllUserTodos(user_id: string) {
   const supabase = await createSupabaseBrowserClient()
-  await supabase.from("todos").delete().eq(user_id)
+  await supabase.from("todos").delete().match({ user_id })
 
   revalidatePath("/todo")
 }
