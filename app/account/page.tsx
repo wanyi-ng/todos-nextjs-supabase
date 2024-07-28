@@ -1,18 +1,14 @@
 import { redirect } from "next/navigation"
-import { createSupabaseServerClient } from "@/utils/supabase/server"
-import readUserSession from "@/helpers/auth/actions" 
+import { getUser } from "@/helpers/auth/actions"
 import AuthButton from "@/components/AuthButton"
 import Link from "next/link"
 import Footer from "@/components/Footer"
-import { getAllTodos } from "@/helpers/todo/actions"
 
 
 export default async function ProfilePage() {
-  const { data } = await readUserSession()
+  const user = await getUser()
 
-  if (!data.session) return redirect('/login')
-
-  const { data: todos } = await getAllTodos()
+  if (!user) return redirect('/login')
 
   return (
     <div className="flex-1 w-full flex flex-col gap-20 items-center">
