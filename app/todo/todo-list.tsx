@@ -1,5 +1,5 @@
 'use client'
-import { useState } from "react
+import { useState } from "react"
 import { Reorder } from "framer-motion"
 import { ChevronUpDownIcon, TrashIcon } from '@heroicons/react/24/outline'
 import { Todo } from '@/types'
@@ -7,7 +7,7 @@ import { deleteTodoById, updateTodoById, deleteAllTodosByUserId } from '@/helper
 
 export default function TodoList({ todos, userId }: { todos: Todo[], userId: string }) {
 
-  const [reorderTodos, setReorderTodos] = useState(todos || [])
+  const [reorderTodos, setReorderTodos] = useState(todos ?? [])
 
   return (
     <section className="flex flex-col max-w-screen-xl w-full mx-auto py-16 space-y-8">
