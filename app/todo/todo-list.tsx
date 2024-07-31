@@ -1,9 +1,13 @@
 'use client'
+import { Reorder } from "framer-motion"
 import { ChevronUpDownIcon, TrashIcon } from '@heroicons/react/24/outline'
 import { Todo } from '@/types'
 import { deleteTodoById, updateTodoById, deleteAllTodosByUserId } from '@/helpers/todo/actions'
 
 export default function TodoList({ todos, userId }: { todos: Todo[], userId: string }) {
+
+  const [reorderTodos, setReorderTodos] = useState(todos || [])
+
   return (
     <section className="flex flex-col max-w-screen-xl w-full mx-auto py-16 space-y-8">
       {todos.length > 0 && (
@@ -16,8 +20,9 @@ export default function TodoList({ todos, userId }: { todos: Todo[], userId: str
         </button>
       )}
 
-      {todos.map((todo: Todo) => (
-        <li key={todo.id} className={`${todo.completed === true ? 'line-through' : '' } flex justify-between items-center gap-4 hover:bg-zinc-300/30 rounded-[4px] pl-4 pr-2 py-2 hover:cursor-grab`}>
+      <Reorder.Group axis="y" values={reorderTodos} onReorder={setReorderTodos}>
+      {reorderTodos.map((todo: Todo) => (
+        <Reorder.Item key={todo.id} value={todo} className={`${todo.completed === true ? 'line-through' : '' } flex justify-between items-center gap-4 hover:bg-zinc-300/30 rounded-[4px] pl-4 pr-2 py-2 hover:cursor-grab`}>
           <div className='flex items-center gap-4'>
             <ChevronUpDownIcon className='size-4' />
             <input
@@ -36,8 +41,9 @@ export default function TodoList({ todos, userId }: { todos: Todo[], userId: str
               <TrashIcon className='size-4' />
             </button>
           </div>
-        </li>
+        </Reorder.Item>
       ))}
+      </Reorder.Group>
     </section>
   )
 }
