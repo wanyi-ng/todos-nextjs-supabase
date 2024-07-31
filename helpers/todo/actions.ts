@@ -17,8 +17,31 @@ export async function getTodosByUserId(user_id: string) {
 
 export async function addTodo(task: string, user_id: string) {
   const supabase = createSupabaseServerClient()
-  const result = await supabase.from("todos").insert({ task, completed: false, user_id })
+  await supabase.from("todos").insert({ task, completed: false, user_id })
+
+  // const result = await supabase.from("todos").insert({ task, completed: false, user_id })
 
   revalidatePath("/todo")
-  return JSON.stringify(result)
+  // return JSON.stringify(result)
+}
+
+export async function deleteTodoById(id: string) {
+  const supabase = createSupabaseServerClient()
+  await supabase.from("todos").delete().eq('id', id)
+
+  revalidatePath("/todo")
+}
+
+export async function updateTodoById(id: string, status: boolean) {
+  const supabase = createSupabaseServerClient()
+  await supabase.from("todos").update({ completed: !status }).eq("id", id)
+
+  revalidatePath("/todo")
+}
+
+export async function deleteAllTodosByUserId(user_id: string) {
+  const supabase = createSupabaseServerClient()
+  await supabase.from("todos").delete().eq('user_id', user_id)
+
+  revalidatePath("/todo")
 }
