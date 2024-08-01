@@ -4,7 +4,6 @@ import { revalidatePath, unstable_noStore as noStore } from "next/cache"
 
 export async function getTodosByUserId(user_id: string) {
   const supabase = createSupabaseServerClient()
-
   const { data, error } = await supabase.from('todos').select('*').eq('user_id', user_id)
 
   if (error) {
@@ -12,7 +11,12 @@ export async function getTodosByUserId(user_id: string) {
     return []
   }
 
-  return data
+  if (data === null) {
+    return []
+  }
+
+  const sortedTodos = await data.sort((a, z) => a.completed === z.completed ? 0 : a.completed ? 1 : -1)
+  return sortedTodos
 }
 
 export async function addTodo(task: string, user_id: string) {
