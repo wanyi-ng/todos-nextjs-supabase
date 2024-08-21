@@ -3,6 +3,7 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { revalidatePath, unstable_noStore as noStore } from "next/cache";
 import { createSupabaseServerClient } from "@/utils/supabase/server";
+import { createSupabaseAuthAdminClient } from "@/utils/supabase/auth_admin";
 
 export async function getUser() {
   const supabase = createSupabaseServerClient()
@@ -60,3 +61,17 @@ export async function signOut() {
   await supabase.auth.signOut();
   return redirect("/login");
 };
+
+export async function deleteUser(userId: string) {
+  const supabase = createSupabaseAuthAdminClient();
+
+  try {
+    await supabase.auth.admin.deleteUser(userId)
+  } catch (error) {
+    console.error(error)
+    redirect('/error')
+  } finally {
+    await supabase.auth.signOut()
+    redirect('/')
+  }
+}
