@@ -22,7 +22,7 @@ export async function readUserSession() {
 export async function signIn(formData: FormData) {
   const supabase = createSupabaseServerClient()
 
-  const { error } = await supabase.auth.signUp({
+  const { error } = await supabase.auth.signInWithPassword({
     email: formData.get('email') as string,
     password: formData.get('password') as string,
   })
