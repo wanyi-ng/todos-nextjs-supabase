@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation"
 import { getUser } from "@/helpers/auth/actions"
 import AuthButton from "@/components/AuthButton"
+import DeleteAccountButton from "@/components/DeleteAccountButton"
 import Link from "next/link"
 import Footer from "@/components/Footer"
 
@@ -62,6 +63,10 @@ export default async function ProfilePage() {
               disabled
               className="px-2 block rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
             />
+          </div>
+
+          <div>
+            <DeleteAccountButton userId={user.id} />
           </div>
         </main>
       </div>
